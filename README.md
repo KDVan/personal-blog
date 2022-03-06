@@ -10,7 +10,7 @@
   <p align="center">
     This is a personal website to share knowledge about programming.
     <br />
-    <a href="https://github.com/KDVan/KDVan-blog/issues">Report Bug</a>
+    <a href="https://github.com/KDVan/personal-blog/issues">Report Bug</a>
     ·
-    <a href="https://github.com/KDVan/KDVan-blog/issues">Request Feature</a>
+    <a href="https://github.com/KDVan/personal-blog/issues">Request Feature</a>
   </p>
