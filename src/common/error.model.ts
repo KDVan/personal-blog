@@ -12,7 +12,7 @@
  *
  *                                    -----------------FILE INFORMATION-----------------
  *                                    - Project: Personal blog
- *                                    - Class: error.models.ts
+ *                                    - Class: error.model.ts
  *                                    - Created by: Duy Kh. Van Ba
  *                                    - Created date: 05 Mar, 2022
  *
