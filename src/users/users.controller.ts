@@ -18,56 +18,156 @@
  *
  **********************************************************************************************************************/
 
+import { AutoMapper } from '@nartc/automapper';
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
   Logger,
+  Param,
+  Post,
+  Put,
+  Query,
+  Req,
+  Request,
 } from '@nestjs/common';
+import {
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags,
+  getSchemaPath,
+} from '@nestjs/swagger';
+import { InjectMapper } from 'nestjsx-automapper';
+import { Constants } from '../common/constants';
+import { UserDetailReqDto } from './dto/user.detail.req.dto';
+import { CommonResDto } from './dto/common.res.dto';
+import { UserDetailDto } from './dto/user.detail.dto';
+import { UserPaginationReqDto } from './dto/user.pagination.req.dto';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { UpdateUserResDto } from './dto/update.user.res.dto';
 
 @ApiTags('users')
-@Controller('api/users')
+@Controller('users')
 export class UsersController {
   private logger = new Logger(UsersController.name);
-  constructor(private readonly usersService: UsersService) {}
+
+  constructor(
+    private readonly usersService: UsersService,
+    @InjectMapper() private readonly mapper: AutoMapper,
+  ) {}
 
   @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
-    this.logger.log(
-      `REST request to create new User with email: ${createUserDto.getEmail}`,
-    );
-    return this.usersService.create(createUserDto);
+  @ApiCreatedResponse({
+    type: UserDetailDto,
+    description: 'The record has been successfully created.',
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad Request',
+  })
+  @ApiNotFoundResponse({
+    description: 'Not Found',
+  })
+  async create(@Req() req, @Body() accountDto: UserDetailReqDto) {
+    this.logger.log(`REST request to create account ${accountDto.email}`);
+
+    //TODO: Add authorization
+
+    return this.usersService.create(accountDto, null);
   }
 
   @Get()
-  async findAll() {
-    this.logger.log('REST request to get all users');
-    return this.usersService.findAll();
+  @ApiOkResponse({
+    schema: {
+      allOf: [
+        {
+          properties: {
+            items: {
+              type: 'array',
+              items: { $ref: getSchemaPath(UserDetailDto) },
+            },
+            meta: {
+              properties: {
+                currentPage: {
+                  type: 'number',
+                },
+                itemCount: {
+                  type: 'number',
+                },
+                itemsPerPage: {
+                  type: 'number',
+                },
+                totalItems: {
+                  type: 'number',
+                },
+                totalPages: {
+                  type: 'number',
+                },
+              },
+            },
+          },
+        },
+      ],
+    },
+    description: 'The record has been successfully loaded.',
+  })
+  async getListUser(
+    @Query()
+    {
+      page = Constants.DEFAULT_PAGE,
+      limit = Constants.DEFAULT_LIMIT,
+      email,
+    }: UserPaginationReqDto,
+  ) {
+    this.logger.log('REST request to get list users');
+    return this.usersService.getListUsers({ page, limit }, email);
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    this.logger.log(`REST request to find user by id: #${id}`);
-    return this.usersService.findOne(id);
+  @Put(':id')
+  @ApiOkResponse({
+    type: UserDetailDto,
+    description: 'The record has been successfully updated.',
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad Request',
+  })
+  @ApiNotFoundResponse({
+    description: 'Not Found',
+  })
+  async update(
+    @Param('id') id: string,
+    @Body() updateUserResDto: UpdateUserResDto,
+  ) {
+    this.logger.log(
+      `REST request to update user details: ${JSON.stringify(
+        updateUserResDto,
+      )}`,
+    );
+    return this.usersService.update(id, updateUserResDto);
   }
 
-  @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    this.logger.log(`REST request to update user by id: #${id}`);
-    return this.usersService.update(id, updateUserDto);
-  }
+  @Delete()
+  @ApiOkResponse({
+    type: CommonResDto,
+    description: 'The record has been successfully deleted.',
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad Request',
+  })
+  @ApiNotFoundResponse({
+    description: 'Not Found',
+  })
+  async deleteUserAccount(
+    @Request() req,
+    @Query('id') id: string,
+  ): Promise<CommonResDto> {
+    this.logger.log(`REST request to delete user account: #${id}`);
 
-  @Delete(':id')
-  async remove(@Param('id') id: string) {
-    this.logger.log(`REST request to remove user by id: #${id}`);
-    return this.usersService.remove(id);
+    //TODO: Add authorization
+
+    await this.usersService.delete(id, null);
+    return new CommonResDto(true);
   }
 }

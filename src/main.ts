@@ -1,5 +1,5 @@
-import { ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { GlobalExceptionsFilter } from './helpers/global-exception-filter';
@@ -18,7 +18,9 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
   /* Config swagger */
+
   const config = new DocumentBuilder()
     .setTitle('KDVan Personal Blog APIs')
     .setDescription('This is the KDVan blog APIs document')
@@ -31,6 +33,7 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('', app, document);
+
   /* End config swagger */
 
   const corsConf = {
@@ -41,7 +44,9 @@ async function bootstrap() {
     credentials: true,
   };
 
-  app.enableCors(corsConf);
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   await app.listen(process.env.PORT_ENV);
+  console.warn('Server is up!');
 }
+
 bootstrap().then();

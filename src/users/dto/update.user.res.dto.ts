@@ -12,38 +12,49 @@
  *
  *                                    -----------------FILE INFORMATION-----------------
  *                                    - Project: Personal blog
- *                                    - Class: users.module.ts
  *                                    - Created by: Duy Kh. Van Ba
  *                                    - Created date: 05 Mar, 2022
  *
  **********************************************************************************************************************/
 
-import { Module } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { UsersController } from './users.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entity/user.entity';
-import { MailModule } from '../mails/mail.module';
-import { AutoMapper, InjectMapper, mapFrom } from 'nestjsx-automapper';
-import { UserDetailDto } from './dto/user.detail.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
 
-@Module({
-  controllers: [UsersController],
-  providers: [UsersService],
-  imports: [MailModule, TypeOrmModule.forFeature([User])],
-  exports: [UsersService, TypeOrmModule],
-})
-export class UsersModule {
-  constructor(@InjectMapper() private readonly mapper: AutoMapper) {
-    this.mapper
-      .createMap(User, UserDetailDto)
-      .forMember(
-        (d) => d.id,
-        mapFrom((s) => s.id),
-      )
-      .forMember(
-        (d) => d.active,
-        mapFrom((s) => s.active),
-      );
+export class UpdateUserResDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  public firstName: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  public lastName: string;
+
+  @ApiProperty({ required: false })
+  public phoneNumber: string;
+
+  @ApiProperty({
+    type: [String],
+  })
+  public roles: string[];
+
+  @ApiProperty({
+    type: [String],
+  })
+  public isolatePermissions: string[];
+
+  constructor(
+    firstName: string,
+    lastName: string,
+    phoneNumber: string,
+    roles: string[],
+    isolatePermissions: string[],
+  ) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.phoneNumber = phoneNumber;
+    this.roles = roles;
+    this.isolatePermissions = isolatePermissions;
   }
 }

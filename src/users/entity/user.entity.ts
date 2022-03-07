@@ -18,82 +18,106 @@
  *
  **********************************************************************************************************************/
 
+import { Exclude } from 'class-transformer';
+import { AutoMap } from 'nestjsx-automapper';
 import { Column, Entity } from 'typeorm';
 import { BaseEntity } from '../../base-entity/base-entity';
 
 @Entity('user')
 export class User extends BaseEntity {
   @Column({ name: 'first_name', width: 255 })
-  private firstname: string;
+  private _firstName: string;
 
   @Column({ name: 'last_name', width: 255 })
-  private lastname: string;
+  private _lastName: string;
 
   @Column({ name: 'full_name', width: 255 })
-  private fullname: string;
+  private _fullName: string;
 
   @Column({ name: 'email', width: 255, unique: true })
-  private email: string;
+  private _email: string;
 
+  @Exclude()
   @Column({ name: 'password', width: 255 })
-  private password: string;
+  private _password: string;
 
   @Column({ name: 'phone_number', width: 64 })
-  private phoneNumber: string;
+  private _phoneNumber: string;
+
+  @Column({ name: 'expired_time', width: 50 })
+  private _expiredTime: Date;
 
   constructor(
-    firstname: string,
-    lastname: string,
-    phoneNumber: string,
-    email: string,
-    password: string,
-    createdBy: string,
-    updatedBy: string,
-    deletedBy: string,
-    fullname: string,
+    _firstname: string,
+    _lastname: string,
+    _phoneNumber: string,
+    _email: string,
+    _password: string,
+    _fullname: string,
   ) {
-    super(createdBy, updatedBy, deletedBy);
-    this.firstname = firstname;
-    this.lastname = lastname;
-    this.fullname = fullname;
-    this.email = email;
-    this.phoneNumber = phoneNumber;
-    this.password = password;
+    super();
+    this._lastName = _lastname;
+    this._firstName = _firstname;
+    this._fullName = _fullname;
+    this._email = _email;
+    this._phoneNumber = _phoneNumber;
+    this._password = _password;
   }
-  public get getFirstname(): string {
-    return this.firstname;
+
+  @AutoMap()
+  public get firstName(): string {
+    return this._firstName;
   }
-  set setFirstname(firstname: string) {
-    this.firstname = firstname;
+
+  set firstName(firstname: string) {
+    this._firstName = firstname;
   }
-  public get getLastname(): string {
-    return this.lastname;
+
+  public get lastName(): string {
+    return this._lastName;
   }
-  public set setLastname(lastname: string) {
-    this.lastname = lastname;
+
+  public set lastName(lastname: string) {
+    this._lastName = lastname;
   }
-  public get getFullname(): string {
-    return this.fullname;
+
+  public get fullName(): string {
+    return this._fullName;
   }
-  public set setFullname(fullname: string) {
-    this.fullname = fullname;
+
+  public set fullName(fullname: string) {
+    this._fullName = fullname;
   }
-  public get getEmail(): string {
-    return this.email;
+
+  public get email(): string {
+    return this._email;
   }
-  public set setEmail(email: string) {
-    this.email = email;
+
+  public set email(email: string) {
+    this._email = email;
   }
-  public get getPassword(): string {
-    return this.password;
+
+  public get password(): string {
+    return this._password;
   }
-  public set setPassword(password: string) {
-    this.password = password;
+
+  public set password(password: string) {
+    this._password = password;
   }
-  public get getPhoneNumber(): string {
-    return this.phoneNumber;
+
+  public get phoneNumber(): string {
+    return this._phoneNumber;
   }
-  public set setPhoneNumber(phoneNumber: string) {
-    this.phoneNumber = phoneNumber;
+
+  public set phoneNumber(value: string) {
+    this._phoneNumber = value;
+  }
+
+  get expiredTime(): Date {
+    return this._expiredTime;
+  }
+
+  set expiredTime(value: Date) {
+    this._expiredTime = value;
   }
 }

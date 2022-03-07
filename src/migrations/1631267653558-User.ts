@@ -65,7 +65,7 @@ export class User1631267653000 implements MigrationInterface {
           },
           {
             name: 'created_date',
-            type: 'timestamp ',
+            type: 'datetime ',
             isNullable: true,
           },
           {
@@ -76,7 +76,7 @@ export class User1631267653000 implements MigrationInterface {
           },
           {
             name: 'updated_date',
-            type: 'timestamp ',
+            type: 'datetime ',
             isNullable: true,
           },
           {
@@ -87,7 +87,7 @@ export class User1631267653000 implements MigrationInterface {
           },
           {
             name: 'deleted_date',
-            type: 'timestamp ',
+            type: 'datetime ',
             isNullable: true,
           },
           {
@@ -99,6 +99,10 @@ export class User1631267653000 implements MigrationInterface {
           {
             name: 'active',
             type: 'bool',
+          },
+          {
+            name: 'expired_time',
+            type: 'datetime ',
           },
         ],
       }),

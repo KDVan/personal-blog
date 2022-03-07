@@ -28,104 +28,94 @@ import {
 
 export abstract class BaseEntity {
   @PrimaryGeneratedColumn('uuid', { name: 'id' })
-  private id: string;
+  private _id: string;
 
   @Column({ default: () => true, name: 'active' })
-  private active: boolean;
+  private _active: boolean;
 
   @CreateDateColumn({
     name: 'created_date',
     default: () => `now()`,
     nullable: false,
   })
-  private createdDate: Date;
+  private _createdDate: Date;
 
   @Column({ name: 'created_by', width: 128 })
-  private createdBy: string;
+  private _createdBy: string;
 
   @UpdateDateColumn({ name: 'updated_date', default: () => `now()` })
-  private updatedDate: Date;
+  private _updatedDate: Date;
 
   @Column({ name: 'updated_by', width: 128 })
-  private updatedBy: string;
+  private _updatedBy: string;
 
   @DeleteDateColumn({ name: 'deleted_date', default: () => `now()` })
-  private deletedDate: Date;
+  private _deletedDate: Date;
 
   @Column({ name: 'deleted_by', width: 128 })
-  private deletedBy: string;
+  private _deletedBy: string;
 
-  protected constructor(
-    createdBy: string,
-    updatedBy: string,
-    deletedBy: string,
-  ) {
-    this.createdBy = createdBy;
-    this.updatedBy = updatedBy;
-    this.deletedBy = deletedBy;
+  public get id(): string {
+    return this._id;
   }
 
-  public get getId(): string {
-    return this.id;
+  public set id(id: string) {
+    this._id = id;
   }
 
-  public set setId(id: string) {
-    this.id = id;
+  public get active(): boolean {
+    return this._active;
   }
 
-  public get isActive(): boolean {
-    return this.active;
+  public set active(active: boolean) {
+    this._active = active;
   }
 
-  public set setActive(active: boolean) {
-    this.active = active;
+  public get createdDate(): Date {
+    return this._createdDate;
   }
 
-  public get getCreatedDate(): Date {
-    return this.createdDate;
+  public set createdDate(createdDate: Date) {
+    this._createdDate = createdDate;
   }
 
-  public set setCreatedDate(createdDate: Date) {
-    this.createdDate = createdDate;
+  public get createdBy(): string {
+    return this._createdBy;
   }
 
-  public get getCreatedBy(): string {
-    return this.createdBy;
+  public set createdBy(createdBy: string) {
+    this._createdBy = createdBy;
   }
 
-  public set setCreatedBy(createdBy: string) {
-    this.createdBy = createdBy;
+  public get updatedDate(): Date {
+    return this._updatedDate;
   }
 
-  public get getUpdatedDate(): Date {
-    return this.updatedDate;
+  public set updatedDate(updatedDate: Date) {
+    this._updatedDate = updatedDate;
   }
 
-  public set setUpdatedDate(updatedDate: Date) {
-    this.updatedDate = updatedDate;
+  public get updatedBy(): string {
+    return this._updatedBy;
   }
 
-  public get getUpdatedBy(): string {
-    return this.updatedBy;
+  public set updatedBy(updatedBy: string) {
+    this._updatedBy = updatedBy;
   }
 
-  public set setUpdatedBy(updatedBy: string) {
-    this.updatedBy = updatedBy;
+  public get deletedDate(): Date {
+    return this._deletedDate;
   }
 
-  public get getDeletedDate(): Date {
-    return this.deletedDate;
+  public set deletedDate(deletedDate: Date) {
+    this._deletedDate = deletedDate;
   }
 
-  public set setDeletedDate(deletedDate: Date) {
-    this.deletedDate = deletedDate;
+  public get deletedBy(): string {
+    return this._deletedBy;
   }
 
-  public get getDeletedBy(): string {
-    return this.deletedBy;
-  }
-
-  public set setDeletedBy(deletedBy: string) {
-    this.deletedBy = deletedBy;
+  public set deletedBy(deletedBy: string) {
+    this._deletedBy = deletedBy;
   }
 }

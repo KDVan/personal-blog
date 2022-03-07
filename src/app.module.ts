@@ -1,12 +1,14 @@
-import { Module } from '@nestjs/common';
+import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { AsyncContextModule } from '@nestjs-steroids/async-context';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection, getConnectionOptions } from 'typeorm';
 import { EntitySubscriber } from './base-entity/entity-subscriber';
 import { GlobalExceptionsFilter } from './helpers/global-exception-filter';
 import { UsersModule } from './users/users.module';
+import { AutomapperModule } from 'nestjsx-automapper';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { UsersModule } from './users/users.module';
       ttl: 60,
       limit: 100,
     }),
+    AutomapperModule.withMapper(),
+    AsyncContextModule.forRoot(),
     UsersModule,
   ],
   controllers: [],
@@ -36,6 +40,10 @@ import { UsersModule } from './users/users.module';
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
     },
     EntitySubscriber,
   ],

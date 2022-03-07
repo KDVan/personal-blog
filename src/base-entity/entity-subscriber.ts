@@ -18,42 +18,50 @@
  *
  **********************************************************************************************************************/
 
-import { Logger } from '@nestjs/common';
+import { AsyncContext } from '@nestjs-steroids/async-context';
 import {
   Connection,
   EntitySubscriberInterface,
   EventSubscriber,
   InsertEvent,
-  RemoveEvent,
   UpdateEvent,
 } from 'typeorm';
 
 @EventSubscriber()
 export class EntitySubscriber implements EntitySubscriberInterface {
-  private logger = new Logger(EntitySubscriber.name);
-  constructor(connection: Connection) {
+  constructor(
+    connection: Connection,
+    private readonly asyncContext: AsyncContext<string, string>,
+  ) {
     connection.subscribers.push(this);
   }
+
   /**
    * Called before post insertion.
    */
+
   beforeInsert(event: InsertEvent<any>) {
-    this.logger.debug('Insert data for created_date and active column');
-    event.entity.setUpdatedDate = new Date();
-    event.entity.setActive = true;
+    event.entity.createdDate = new Date();
+    event.entity.active = true;
+    this.asyncContext.register();
+    event.entity.createdBy = this.asyncContext.get('email');
   }
 
   /**
    * Called before entity update.
    */
-  beforeUpdate(event: UpdateEvent<any>) {
-    event.entity.setUpdatedDate = new Date();
-  }
 
-  /**
-   * Called before entity removal.
-   */
-  beforeRemove(event: RemoveEvent<any>) {
-    event.entity.setDeletedDate = new Date();
+  beforeUpdate(event: UpdateEvent<any>) {
+    this.asyncContext.register();
+    if (event.entity.active === true) {
+      event.entity.updatedDate = new Date();
+      event.entity.updatedBy = this.asyncContext.get('email');
+    } else if (event.entity.email != null) {
+      event.entity.updatedBy = this.asyncContext.get('email');
+      event.entity.deletedBy = this.asyncContext.get('email');
+    } else {
+      event.entity.deletedDate = new Date();
+      event.entity.deletedBy = this.asyncContext.get('email');
+    }
   }
 }

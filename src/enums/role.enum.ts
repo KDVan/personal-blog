@@ -12,38 +12,15 @@
  *
  *                                    -----------------FILE INFORMATION-----------------
  *                                    - Project: Personal blog
- *                                    - Class: users.module.ts
+ *                                    - Class: role.enum.ts
  *                                    - Created by: Duy Kh. Van Ba
- *                                    - Created date: 05 Mar, 2022
+ *                                    - Created date: 07 Mar, 2022
  *
  **********************************************************************************************************************/
 
-import { Module } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { UsersController } from './users.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entity/user.entity';
-import { MailModule } from '../mails/mail.module';
-import { AutoMapper, InjectMapper, mapFrom } from 'nestjsx-automapper';
-import { UserDetailDto } from './dto/user.detail.dto';
-
-@Module({
-  controllers: [UsersController],
-  providers: [UsersService],
-  imports: [MailModule, TypeOrmModule.forFeature([User])],
-  exports: [UsersService, TypeOrmModule],
-})
-export class UsersModule {
-  constructor(@InjectMapper() private readonly mapper: AutoMapper) {
-    this.mapper
-      .createMap(User, UserDetailDto)
-      .forMember(
-        (d) => d.id,
-        mapFrom((s) => s.id),
-      )
-      .forMember(
-        (d) => d.active,
-        mapFrom((s) => s.active),
-      );
-  }
+export enum RoleEnum {
+  SYSTEM_ADMIN = 'SYSTEM_ADMIN',
+  ADMIN = 'ADMIN',
+  STUDENT = 'STUDENT',
+  MANAGER = 'MANAGER',
 }
