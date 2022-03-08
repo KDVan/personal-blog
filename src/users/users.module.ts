@@ -23,14 +23,14 @@ import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entity/user.entity';
-import { MailModule } from '../mails/mail.module';
 import { AutoMapper, InjectMapper, mapFrom } from 'nestjsx-automapper';
 import { UserDetailDto } from './dto/user.detail.dto';
+import { MailService } from '../mail/mail.services';
 
 @Module({
   controllers: [UsersController],
-  providers: [UsersService],
-  imports: [MailModule, TypeOrmModule.forFeature([User])],
+  providers: [UsersService, MailService],
+  imports: [TypeOrmModule.forFeature([User])],
   exports: [UsersService, TypeOrmModule],
 })
 export class UsersModule {

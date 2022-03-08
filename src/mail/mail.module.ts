@@ -41,7 +41,7 @@ import { ConfigService } from '@nestjs/config';
           from: `"Duy Kh. Van Ba" <${config.get('MAIL_FROM')}>`,
         },
         template: {
-          dir: join(__dirname, 'templates'),
+          dir: join(__dirname, `\\templates`),
           adapter: new HandlebarsAdapter(),
           options: {
             strict: true,

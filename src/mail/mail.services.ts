@@ -19,23 +19,29 @@
  **********************************************************************************************************************/
 
 import { MailerService } from '@nestjs-modules/mailer';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { EmailDto } from './dto/email.dto';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class MailService {
+  private logger = new Logger(MailService.name);
+
   constructor(
     private mailerService: MailerService,
     private config: ConfigService,
   ) {}
 
   async sendMail(emailTemplateDto: EmailDto, data: any) {
+    this.logger.log(__dirname);
     await this.mailerService.sendMail({
       to: emailTemplateDto.to,
       from: this.config.get('MAIL_FROM'),
       subject: emailTemplateDto.subject,
-      template: './'.concat(emailTemplateDto.template),
+
+      // TODO: If not working change to absolute path
+
+      template: `${__dirname}\\`.concat(emailTemplateDto.template),
       context: data,
     });
   }

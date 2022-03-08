@@ -36,11 +36,13 @@ import { Repository, Transaction, TransactionRepository } from 'typeorm';
 import { PaginationModel } from '../common/pagination/pagination.model';
 import { ErrorCodes } from '../enums/error-codes';
 import { searchParam } from '../helpers/common.helpers';
-import { MailService } from '../mails/mail.services';
+import { MailService } from '../mail/mail.services';
 import { UpdateUserResDto } from './dto/update.user.res.dto';
 import { UserDetailDto } from './dto/user.detail.dto';
 import { UserDetailReqDto } from './dto/user.detail.req.dto';
 import { User } from './entity/user.entity';
+import { EmailDto } from '../mail/dto/email.dto';
+import { EmailConst } from '../common/email.constants';
 
 @Injectable()
 export class UsersService {
@@ -88,6 +90,21 @@ export class UsersService {
       userData.deletedBy = null;
     }
     const user: User = await userTransactionRepository.save(userData);
+
+    // send mail to user
+
+    this.logger.debug(`Send mail to user: ${JSON.stringify(user.email)}`);
+    const email = new EmailDto(
+      user.email,
+      EmailConst.WELCOME_TITLE,
+      EmailConst.WELCOME_TEMPLATE,
+      user,
+    );
+
+    //TODO: Send mail to set password when new account is created
+
+    user.firstName = user.firstName.toUpperCase();
+    await this.mailService.sendMail(email, user);
 
     return this.mapper.map(user, UserDetailDto);
   }
