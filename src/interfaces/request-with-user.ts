@@ -19,7 +19,7 @@
  **********************************************************************************************************************/
 
 import { Request } from 'express';
-import { User } from '../users/entity/user.entity';
+import { User } from '../users/entities/user.entity';
 
 interface RequestWithUser extends Request {
   user: User;
