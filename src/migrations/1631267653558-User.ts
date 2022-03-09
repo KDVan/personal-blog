@@ -1,13 +1,23 @@
-/***********************************************************************************************************************
- *                                   Copyright (C) 2021 Duy Kh. Van Ba duyvbkh134@gmail.com                            *
- *                                                                                                                     *
- *                                   This file is part of Document Management System (DoMa).                           *
- *                                                                                                                     *
- *                                 -----------------PROPRIETARY INFORMATION-----------------                           *
- *                                                                                                                     *
- *                                     Document Management System (DoMa) can NOT be copied                             *
- *                                                                                                                     *
- *                              and/or distributed without the express permission of Duy Kh. Van Ba                    *
+/**********************************************************************************************************************
+ *                                                                                                                    *
+ *                            Copyright (C) 2021 - 2022 Duy Kh. Van Ba duyvbkh134@gmail.com                           *
+ *                                                                                                                    *
+ *                                This file is part of Hexon System (www.hexon.systems)                               *
+ *                                                                                                                    *
+ *                              -----------------PROPRIETARY INFORMATION-----------------                             *
+ *                                                                                                                    *
+ *                                             This file can NOT be copied                                            *
+ *                                                                                                                    *
+ *                         and/or distributed without the express permission of Duy Kh. Van Ba                        *
+ *                                                                                                                    *
+ * ********************************************************************************************************************
+ *                                                                                                                    *
+ *                                  -----------------FILE INFORMATION-----------------                                *
+ *                                  - Project: Personal blog                                                          *
+ *                                  - Class: 1631267653558-User.ts                                                    *
+ *                                  - Created by: Duy Kh. Van Ba                                                      *
+ *                                  - Created date: Wednesday, Mar 9 2022                                             *
+ *                                                                                                                    *
  **********************************************************************************************************************/
 
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
@@ -99,10 +109,12 @@ export class User1631267653000 implements MigrationInterface {
           {
             name: 'active',
             type: 'bool',
+            default: true,
           },
           {
             name: 'expired_time',
             type: 'datetime ',
+            isNullable: true,
           },
         ],
       }),

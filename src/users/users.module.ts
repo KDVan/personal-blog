@@ -22,7 +22,7 @@ import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entity/user.entity';
+import { User } from './entities/user.entity';
 import { AutoMapper, InjectMapper, mapFrom } from 'nestjsx-automapper';
 import { UserDetailDto } from './dto/user.detail.dto';
 import { MailService } from '../mail/mail.services';

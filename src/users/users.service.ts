@@ -40,7 +40,7 @@ import { MailService } from '../mail/mail.services';
 import { UpdateUserResDto } from './dto/update.user.res.dto';
 import { UserDetailDto } from './dto/user.detail.dto';
 import { UserDetailReqDto } from './dto/user.detail.req.dto';
-import { User } from './entity/user.entity';
+import { User } from './entities/user.entity';
 import { EmailDto } from '../mail/dto/email.dto';
 import { EmailConst } from '../common/email.constants';
 

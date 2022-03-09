@@ -34,6 +34,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -70,6 +71,7 @@ export class UsersController {
   @ApiNotFoundResponse({
     description: 'Not Found',
   })
+  @ApiBearerAuth(Constants.AUTH_ACCESS_TOKEN_CONST)
   async create(@Req() req, @Body() accountDto: UserDetailReqDto) {
     this.logger.log(`REST request to create account ${accountDto.email}`);
 
@@ -113,6 +115,7 @@ export class UsersController {
     },
     description: 'The record has been successfully loaded.',
   })
+  @ApiBearerAuth(Constants.AUTH_ACCESS_TOKEN_CONST)
   async getListUser(
     @Query()
     {
